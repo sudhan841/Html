@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Solar system</title>
+        <style>
+            .alert {
+                color: aqua;
+                background: green;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id="heading">Welcome</h1>
+    <p>Hello</p>
+    <p>Here are some facts about our solar <system class...></system></p>
+    
+    <script>
+        let div = document.createElement('div')
+        div.id = "paragraph";
+        div.className = "alert";
+        div.innerHTML = "<p>Congrats! You have created a div.</p>";
+        document.body.append(div);
+        let heading = document.getElementById("heading")
+        heading.innerHTML = '&#128512'
+        document.querySelector('header p').innerHTML = "<strong>Good job!</strong>";
+    </script>
+        <p>Our solar system features eight distinct planets orbiting the Sun, divided into rocky inner planets and outer gas/ice
+        giants, all orbiting on the same plane. Mercury is the smallest and hottest/coldest (no atmosphere), Venus is the
+        hottest (thick atmosphere), Earth supports life, and Mars has giant volcanoes. The giants include Jupiter (largest),
+        Saturn (rings), Uranus (sideways rotation), and Neptune (fastest winds).</p>
+    </body>
+</html>
