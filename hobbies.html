@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Hobbies</title>
+        <style>
+            .alert {
+                color: aqua;
+                background: green;
+                padding: 5px;
+            }
+        </style>
+        </head>
+    </head>
+    <body>
+        <p>My favourite thing to do in my free time is to build legos</p>
+<script>
+    let div = document.createElement('div')
+    div.id = "paragraph";
+    div.className = "alert";
+    div.innerHTML = "<p>Congrats! You have created a div.</p>";
+    document.body.append(div);
+    let heading = document.getElementById("heading")
+    heading.innerHTML = '&#128512'
+    document.querySelector('header p').innerHTML = "<strong>Good job!</strong>";
+</script>
+    </body>
+</html>
