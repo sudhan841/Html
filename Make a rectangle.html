@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>rectangle</title>
+        <style>
+            h2 {
+                text-align: center;
+            }
+            .rectangle {
+                border: 1px solid black;
+                width: 200px;
+    height: 200px;
+    margin: auto;
+            }
+            .buttons {
+                padding: 20px;
+                width: 200px;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="buttons">
+            <button onclick="changeToCircle()">Make circle</button>
+            <button onclick="hide()">Hide</button>
+<button onclick="show()">show</button>
+        </div>
+        <div class="rectangle"></div>
+        <script>
+            let div = document.querySelector(".rectangle");
+
+            function changeToCircle() {
+                div.style.borderRadius = "50%";
+            }
+
+            function hide() {
+                div.style.display = "none";
+            }
+
+    function show() {
+        div.style.display = "block";
+    }
+            
+        </script>
+    </body>
+</html>
