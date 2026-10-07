@@ -2,58 +2,418 @@
 <html>
 
 <head>
-    <title>Atharv's Pokémon World</title>
+    <title>Pokédex</title>
 
     <style>
         body {
             font-family: Arial;
             text-align: center;
-            background: lightblue;
+            background-color: lightblue;
+            margin: 0;
         }
 
         h1 {
-            color: red;
+            background-color: red;
+            color: white;
+            padding: 25px;
+            margin: 0;
+            font-size: 40px;
+        }
+
+        #search {
+            margin: 25px;
+            padding: 15px;
+            width: 300px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 2px solid red;
+        }
+
+        #pokedex {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
         }
 
         .pokemon {
-            background: white;
-            margin: 20px auto;
+            background-color: white;
+            width: 200px;
             padding: 15px;
-            width: 250px;
-            border-radius: 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px gray;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        button {
+        .pokemon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px gray;
+        }
+
+        .pokemon img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .pokemon h2 {
+            margin: 5px;
+        }
+
+        .number {
+            color: gray;
+        }
+
+        /* DETAILS */
+
+        #details {
+            display: none;
+            background-color: white;
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 5px 20px gray;
+        }
+
+        #details img {
+            width: 300px;
+            height: 300px;
+        }
+
+        #details h2 {
+            font-size: 35px;
+            color: red;
+        }
+
+        .stat {
+            background-color: lightgray;
+            margin: 10px;
             padding: 10px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+
+        #backButton {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 10px;
             cursor: pointer;
+        }
+
+        #backButton:hover {
+            background-color: darkred;
+        }
+
+        /* MOVES */
+
+        #moves {
+            margin-top: 25px;
+        }
+
+        .move {
+            display: inline-block;
+            background-color: white;
+            border: 2px solid red;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 15px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .move:hover {
+            background-color: red;
+            color: white;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>⚡ Atharv's Pokémon World ⚡</h1>
+    <h1>🔴 Atharv's Pokédex ⚡</h1>
 
-    <p>Welcome, Trainer!</p>
+    <input type="text" id="search" placeholder="🔍 Search Pokémon..." oninput="searchPokemon()">
 
-    <div class="pokemon">
-        <h2>🥋 Lucario</h2>
-        <p>Type: Fighting / Steel</p>
-        <p>HP: 150</p>
-        <button onclick="alert('Lucario used Aura Sphere! 💥')">
-            Attack
-        </button>
+    <div id="pokedex">
+        <h2>Loading Pokémon... 🔄</h2>
     </div>
 
-    <div class="pokemon">
-        <h2>⚡ Pikachu</h2>
-        <p>Type: Electric</p>
-        <p>HP: 100</p>
-        <button onclick="alert('Pikachu used Thunderbolt! ⚡')">
-            Attack
+
+    <!-- DETAILS PAGE -->
+
+    <div id="details">
+
+        <button id="backButton" onclick="goBack()">
+            ⬅️ Back to Pokédex
         </button>
+
+        <h2 id="detailName"></h2>
+
+        <p id="detailNumber"></p>
+
+        <img id="detailImage">
+
+        <div class="stat">
+            🔥 Type:
+            <span id="detailType"></span>
+        </div>
+
+        <div class="stat">
+            ❤️ HP:
+            <span id="detailHP"></span>
+        </div>
+
+        <div class="stat">
+            ⚔️ Attack:
+            <span id="detailAttack"></span>
+        </div>
+
+        <div class="stat">
+            🛡️ Defense:
+            <span id="detailDefense"></span>
+        </div>
+
+        <div class="stat">
+            ⚡ Speed:
+            <span id="detailSpeed"></span>
+        </div>
+
+        <div class="stat">
+            ✨ Abilities:
+            <span id="detailAbilities"></span>
+        </div>
+
+        <div class="stat">
+            📏 Height:
+            <span id="detailHeight"></span>
+        </div>
+
+        <div class="stat">
+            ⚖️ Weight:
+            <span id="detailWeight"></span>
+        </div>
+
+
+        <!-- MOVES -->
+
+        <div id="moves">
+
+            <h2>⚔️ Moves</h2>
+
+            <div id="moveList">
+                Loading moves...
+            </div>
+
+        </div>
+
     </div>
+
+
+    <script>
+
+        let allPokemon = [];
+
+
+        // LOAD ALL POKEMON
+
+        async function loadPokemon() {
+
+            const response = await fetch(
+                "https://pokeapi.co/api/v2/pokemon?limit=2000"
+            );
+
+            const data = await response.json();
+
+            allPokemon = data.results;
+
+            showPokemon(allPokemon);
+        }
+
+
+        // SHOW POKEMON CARDS
+
+        async function showPokemon(pokemonList) {
+
+            const pokedex = document.getElementById("pokedex");
+
+            pokedex.innerHTML = "";
+
+            for (let pokemon of pokemonList) {
+
+                const id = pokemon.url
+                    .split("/")
+                    .filter(Boolean)
+                    .pop();
+
+                const card = document.createElement("div");
+
+                card.className = "pokemon";
+
+                card.innerHTML = `
+                    <h2>${pokemon.name.toUpperCase()}</h2>
+
+                    <p class="number">#${id}</p>
+
+                    <img
+                        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png"
+                        alt="${pokemon.name}"
+                    >
+                `;
+
+                card.onclick = function () {
+                    showDetails(id);
+                };
+
+                pokedex.appendChild(card);
+            }
+        }
+
+
+        // SHOW DETAILS
+
+        async function showDetails(id) {
+
+            const response = await fetch(
+                "https://pokeapi.co/api/v2/pokemon/" + id
+            );
+
+            const pokemon = await response.json();
+
+
+            document.getElementById("pokedex").style.display = "none";
+
+            document.getElementById("search").style.display = "none";
+
+            document.getElementById("details").style.display = "block";
+
+
+            // NAME
+
+            document.getElementById("detailName").textContent =
+                pokemon.name.toUpperCase();
+
+
+            // NUMBER
+
+            document.getElementById("detailNumber").textContent =
+                "#" + pokemon.id;
+
+
+            // IMAGE
+
+            document.getElementById("detailImage").src =
+                pokemon.sprites.other["official-artwork"].front_default;
+
+
+            // TYPE
+
+            document.getElementById("detailType").textContent =
+                pokemon.types
+                    .map(type => type.type.name)
+                    .join(" / ");
+
+
+            // STATS
+
+            document.getElementById("detailHP").textContent =
+                pokemon.stats[0].base_stat;
+
+            document.getElementById("detailAttack").textContent =
+                pokemon.stats[1].base_stat;
+
+            document.getElementById("detailDefense").textContent =
+                pokemon.stats[2].base_stat;
+
+            document.getElementById("detailSpeed").textContent =
+                pokemon.stats[5].base_stat;
+
+
+            // ABILITIES
+
+            document.getElementById("detailAbilities").textContent =
+                pokemon.abilities
+                    .map(ability => ability.ability.name)
+                    .join(", ");
+
+
+            // HEIGHT
+
+            document.getElementById("detailHeight").textContent =
+                (pokemon.height / 10) + " m";
+
+
+            // WEIGHT
+
+            document.getElementById("detailWeight").textContent =
+                (pokemon.weight / 10) + " kg";
+
+
+            // MOVES
+
+            const moveList = document.getElementById("moveList");
+
+            moveList.innerHTML = "";
+
+
+            // SHOW FIRST 10 MOVES
+
+            const moves = pokemon.moves.slice(0, 10);
+
+
+            for (let move of moves) {
+
+                const moveElement = document.createElement("span");
+
+                moveElement.className = "move";
+
+                moveElement.textContent =
+                    move.move.name;
+
+                moveList.appendChild(moveElement);
+            }
+
+        }
+
+
+
+
+        function goBack() {
+
+            document.getElementById("details").style.display = "none";
+
+            document.getElementById("pokedex").style.display = "flex";
+
+            document.getElementById("search").style.display =
+                "inline-block";
+        }
+
+
+
+        function searchPokemon() {
+
+            const search = document
+                .getElementById("search")
+                .value
+                .toLowerCase();
+
+            const filtered = allPokemon.filter(pokemon =>
+                pokemon.name.includes(search)
+            );
+
+            showPokemon(filtered);
+        }
+
+
+        // START
+
+        loadPokemon();
+
+    </script>
 
 </body>
 
