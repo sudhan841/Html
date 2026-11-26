@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)file:///C:/Users/Athar/Desktop/Python/pokemon%20battle%20av/cademy.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atharv's Pokémon World</title>
+    <style>
+        :root {
+            --bg: #101729;
+            --panel: #1b2740;
+            --panel2: #263653;
+            --text: #f4f7ff;
+            --muted: #aebbd1;
+            --green: #45d483;
+            --blue: #61b7ff;
+            --gold: #ffcf5a;
+            --red: #ff7272;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            padding: 18px;
+            text-align: center;
+            background: linear-gradient(120deg, #193c68, #542c75);
+            border-bottom: 3px solid #7188bd;
+        }
+
+        header h1 {
+            margin: 0 0 7px;
+            font-size: clamp(24px, 4vw, 36px);
+        }
+
+        header p {
+            margin: 0;
+            color: #dce8ff;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            justify-content: center;
+            padding: 12px;
+            background: #121d31;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        button,
+        select,
+        input {
+            font: inherit;
+            border: 0;
+            border-radius: 9px;
+            padding: 10px 12px;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: bold;
+            color: #102039;
+            background: #8fcaff;
+        }
+
+        button:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button.green {
+            background: var(--green);
+        }
+
+        button.gold {
+            background: var(--gold);
+        }
+
+        button.red {
+            background: #ff9b9b;
+        }
+
+        button.purple {
+            background: #d5a7ff;
+        }
+
+        button.dark {
+            background: #435674;
+            color: white;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 15px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid #354968;
+            border-radius: 15px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+
+        h2,
+        h3 {
+            margin-top: 0;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .stat {
+            background: var(--panel2);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 23px;
+            margin-top: 5px;
+        }
+
+        .world {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            gap: 12px;
+        }
+
+        .region {
+            min-height: 145px;
+            text-align: center;
+            color: white;
+            background: linear-gradient(145deg, #2a5260, #24405d);
+            border: 2px solid #46617e;
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .region .emoji {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .region small {
+            display: block;
+            color: #d0e3f5;
+            margin: 7px 0;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 12px;
+        }
+
+        .moncard {
+            background: var(--panel2);
+            border: 1px solid #435775;
+            border-radius: 13px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .moncard img {
+            width: 105px;
+            height: 105px;
+            object-fit: contain;
+            image-rendering: pixelated;
+        }
+
+        .moncard h3 {
+            margin: 5px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            background: #3a5272;
+            font-size: 12px;
+            margin: 3px;
+        }
+
+        .bar {
+            height: 13px;
+            background: #101729;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 6px 0;
+        }
+
+        .fill {
+            height: 100%;
+            background: var(--green);
+            transition: width .3s;
+        }
+
+        .energy {
+            background: var(--blue);
+        }
+
+        .battlefield {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .fighter {
+            text-align: center;
+            background: #253650;
+            border-radius: 13px;
+            padding: 12px;
+        }
+
+        .fighter img {
+            width: min(100%, 180px);
+            height: 150px;
+            object-fit: contain;
+            image-rendering: pixelated;
+        }
+
+        .log {
+            background: #0c1424;
+            padding: 12px;
+            border-radius: 10px;
+            min-height: 75px;
+            white-space: pre-line;
+            line-height: 1.5;
+            margin-top: 12px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .actions button {
+            flex: 1 1 125px;
+        }
+
+        input,
+        select {
+            background: #fff;
+            color: #182338;
+            max-width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 25px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: #172238;
+            border-radius: 12px;
+            padding: 12px 18px;
+            box-shadow: 0 4px 25px #0008;
+            z-index: 20;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        @media(max-width:520px) {
+            main {
+                padding: 9px
+            }
+
+            .panel {
+                padding: 12px
+            }
+
+            .battlefield {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .fighter img {
+                height: 110px
+            }
+
+            nav {
+                position: static
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>⚡ Atharv's Pokémon World</h1>
+        <p>Explore regions, catch Pokémon, evolve your team and conquer gyms!</p>
+    </header>
+
+    <nav>
+        <button onclick="showPage(&#39;world&#39;)">🗺️ World</button>
+        <button onclick="showPage(&#39;team&#39;)">👥 Team &amp; PC</button>
+        <button onclick="showPage(&#39;pokedex&#39;)">📖 Pokédex</button>
+        <button onclick="showPage(&#39;shop&#39;)">🏪 Pokéstore</button>
+        <button onclick="showPage(&#39;battle&#39;)">⚔️ Battle</button>
+        <button onclick="saveGame()">💾 Save</button>
+        <button class="dark" onclick="loadGame()">📂 Load</button>
+        <button class="dark" onclick="toggleSound()">🔊 Sound</button>
+    </nav>
+
+    <main>
+        <section id="starter" class="panel hidden">
+            <h2>Choose your first partner!</h2>
+            <p class="muted">Your adventure begins here. Pick one Pokémon.</p>
+            <div class="cards" id="starterCards">
+    <div class="moncard">
+      <img src="./Atharv&#39;s Pokémon World_files/1.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;">
+      <h3>Bulbasaur</h3><span class="badge">Grass</span>
+      <button class="green" onclick="chooseStarter(1)">Choose Bulbasaur</button>
+    </div>
+    <div class="moncard">
+      <img src="./Atharv&#39;s Pokémon World_files/4.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;">
+      <h3>Charmander</h3><span class="badge">Fire</span>
+      <button class="green" onclick="chooseStarter(4)">Choose Charmander</button>
+    </div>
+    <div class="moncard">
+      <img src="./Atharv&#39;s Pokémon World_files/7.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;">
+      <h3>Squirtle</h3><span class="badge">Water</span>
+      <button class="green" onclick="chooseStarter(7)">Choose Squirtle</button>
+    </div>
+    <div class="moncard">
+      <img src="./Atharv&#39;s Pokémon World_files/25.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;">
+      <h3>Pikachu</h3><span class="badge">Electric</span>
+      <button class="green" onclick="chooseStarter(25)">Choose Pikachu</button>
+    </div></div>
+        </section>
+
+        <section id="dashboard" class="panel">
+            <div class="stats">
+                <div class="stat">🏅 Trainer<strong id="trainerName">Atharv</strong></div>
+                <div class="stat">🪙 Coins<strong id="coins">485</strong></div>
+                <div class="stat">🏆 Gym badges<strong id="badges">2 / 8</strong></div>
+                <div class="stat">🔴 Poké Balls<strong id="balls">10</strong></div>
+                <div class="stat">👥 Team<strong id="teamCount">4 / 6</strong></div>
+                <div class="stat">📍 Location<strong id="locationName">Starter Meadow</strong></div>
+            </div>
+        </section>
+
+        <section id="page-world" class="page hidden">
+            <div class="panel">
+                <h2>🗺️ The Pokémon World</h2>
+                <p class="muted">Choose a region to travel to. Explore to find wild Pokémon. Stronger regions have
+                    tougher opponents and better rewards.</p>
+                <div class="world" id="worldMap">
+    <button class="region" onclick="travel(&#39;meadow&#39;)" style="border-color:#ffd56a;box-shadow:0 0 12px #ffd56a55">
+      <span class="emoji">🌱</span>
+      <strong>Starter Meadow</strong>
+      <small>Wild levels 2–5</small>
+      <span class="badge">Current location</span>
+    </button>
+  
+    <button class="region" onclick="travel(&#39;forest&#39;)" style="">
+      <span class="emoji">🌲</span>
+      <strong>Whispering Forest</strong>
+      <small>Wild levels 4–10</small>
+      
+    </button>
+  
+    <button class="region" onclick="travel(&#39;coast&#39;)" style="">
+      <span class="emoji">🌊</span>
+      <strong>Crystal Coast</strong>
+      <small>Wild levels 7–14</small>
+      
+    </button>
+  
+    <button class="region" onclick="travel(&#39;volcano&#39;)" style="">
+      <span class="emoji">🌋</span>
+      <strong>Blazing Volcano</strong>
+      <small>Wild levels 12–22</small>
+      
+    </button>
+  
+    <button class="region" onclick="travel(&#39;desert&#39;)" style="">
+      <span class="emoji">🏜️</span>
+      <strong>Golden Desert</strong>
+      <small>Wild levels 16–27</small>
+      
+    </button>
+  
+    <button class="region" onclick="travel(&#39;mountain&#39;)" style="">
+      <span class="emoji">⛰️</span>
+      <strong>Thunder Mountains</strong>
+      <small>Wild levels 20–32</small>
+      
+    </button>
+  
+    <button class="region" onclick="travel(&#39;ice&#39;)" style="">
+      <span class="emoji">❄️</span>
+      <strong>Frozen Kingdom</strong>
+      <small>Wild levels 25–38</small>
+      
+    </button>
+  
+    <button class="region" onclick="travel(&#39;dragon&#39;)" style="">
+      <span class="emoji">🐉</span>
+      <strong>Dragon's Realm</strong>
+      <small>Wild levels 32–48</small>
+      
+    </button>
+  </div>
+                <div class="actions">
+                    <button class="green" onclick="explore()">🌿 Explore this region</button>
+                    <button class="gold" onclick="challengeGym()">🏟️ Challenge the gym</button>
+                </div>
+                <div id="worldMessage" class="log">You travelled to Starter Meadow. Explore to discover wild Pokémon.</div>
+            </div>
+        </section>
+
+        <section id="page-team" class="page hidden">
+            <div class="panel">
+                <h2>👥 Your Team</h2>
+                <p class="muted">Your active team holds up to six Pokémon. Move extra Pokémon into your PC.</p>
+                <div id="teamCards" class="cards"><div class="moncard">
+    <img src="./Atharv&#39;s Pokémon World_files/4.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;">
+    <h3>charmander</h3>
+    <span class="badge">Lv. 6</span>
+    <span class="badge">Fire</span>
+    <div class="bar"><div class="fill" style="width:100%"></div></div>
+    <small>HP 59/59 • Energy 100/100</small>
+    <div class="actions">
+      <button onclick="moveToPC(1)">Move to PC</button>
+           <button class="green" onclick="healMon(1)">Rest</button>
+    </div>
+  </div><div class="moncard">
+    <img src="./Atharv&#39;s Pokémon World_files/10.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;">
+    <h3>caterpie</h3>
+    <span class="badge">Lv. 5</span>
+    <span class="badge">Bug</span>
+    <div class="bar"><div class="fill" style="width:100%"></div></div>
+    <small>HP 68/68 • Energy 100/100</small>
+    <div class="actions">
+      <button onclick="moveToPC(3)">Move to PC</button>
+           <button class="green" onclick="healMon(3)">Rest</button>
+    </div>
+  </div><div class="moncard">
+    <img src="./Atharv&#39;s Pokémon World_files/16.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;">
+    <h3>pidgey</h3>
+    <span class="badge">Lv. 6</span>
+    <span class="badge">Normal</span>
+    <div class="bar"><div class="fill" style="width:100%"></div></div>
+    <small>HP 67/67 • Energy 100/100</small>
+    <div class="actions">
+      <button onclick="moveToPC(11)">Move to PC</button>
+           <button class="green" onclick="healMon(11)">Rest</button>
+    </div>
+  </div><div class="moncard">
+    <img src="./Atharv&#39;s Pokémon World_files/46.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;">
+    <h3>paras</h3>
+    <span class="badge">Lv. 9</span>
+    <span class="badge">Bug</span>
+    <div class="bar"><div class="fill" style="width:100%"></div></div>
+    <small>HP 76/76 • Energy 100/100</small>
+    <div class="actions">
+      <button onclick="moveToPC(15)">Move to PC</button>
+           <button class="green" onclick="healMon(15)">Rest</button>
+    </div>
+  </div></div>
+            </div>
+            <div class="panel">
+                <h2>💻 Pokémon PC</h2>
+                <div id="pcCards" class="cards"><p>Your PC is empty.</p></div>
+            </div>
+            <div class="panel">
+                <h2>🎒 Bag</h2>
+                <div id="bagInfo">
+    <p>🔴 Poké Balls: <strong>10</strong></p>
+    <p>🧪 Potions: <strong>3</strong></p>
+    <p>💖 Super Potions: <strong>1</strong></p>
+    <p>✨ Revives: <strong>1</strong></p>
+    <p>🪨 Evolution stones: <strong>Fire Stone: 0 • Water Stone: 0 • Thunder Stone: 0 • Leaf Stone: 0 • Moon Stone: 0</strong></p></div>
+                <div class="actions">
+                    <button onclick="usePotion()">🧪 Use Potion (heals 30)</button>
+                    <button onclick="useSuperPotion()">💖 Use Super Potion (heals 70)</button>
+                    <button onclick="useRevive()">✨ Use Revive</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-pokedex" class="page hidden">
+            <div class="panel">
+                <h2>📖 Pokédex</h2>
+                <p class="muted">Search the Pokémon you have discovered. Encountering or catching one adds it to your
+                    Pokédex.</p>
+                <input id="dexSearch" placeholder="Search Pokémon..." oninput="renderDex()">
+                <div id="dexCards" class="cards" style="margin-top:12px"><div class="moncard"><img src="./Atharv&#39;s Pokémon World_files/19.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;"><h3>Pokémon #19</h3><span class="badge">#19</span></div><div class="moncard"><img src="./Atharv&#39;s Pokémon World_files/25.png" alt="Pokémon" onerror="this.onerror=null;this.src=&#39;https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png&#39;;this.style.display=&#39;none&#39;"><h3>Pokémon #25</h3><span class="badge">#25</span></div></div>
+            </div>
+        </section>
+
+        <section id="page-shop" class="page">
+            <div class="panel">
+                <h2>🏪 Pokéstore</h2>
+                <p>Coins: <strong id="shopCoins">485</strong></p>
+                <div id="shopCards" class="cards">
+    <div class="moncard">
+      <h3>Poké Ball</h3>
+      <p class="muted">Three balls for catching Pokémon.</p>
+      <span class="badge">🪙 30 coins</span>
+      <button class="green" onclick="buyItem(0)">Buy</button>
+    </div>
+    <div class="moncard">
+      <h3>Potion</h3>
+      <p class="muted">Heals 30 HP.</p>
+      <span class="badge">🪙 40 coins</span>
+      <button class="green" onclick="buyItem(1)">Buy</button>
+    </div>
+    <div class="moncard">
+      <h3>Super Potion</h3>
+      <p class="muted">Heals 70 HP.</p>
+      <span class="badge">🪙 75 coins</span>
+      <button class="green" onclick="buyItem(2)">Buy</button>
+    </div>
+    <div class="moncard">
+      <h3>Revive</h3>
+      <p class="muted">Revives a fainted Pokémon.</p>
+      <span class="badge">🪙 100 coins</span>
+      <button class="green" onclick="buyItem(3)">Buy</button>
+    </div>
+    <div class="moncard">
+      <h3>Fire Stone</h3>
+      <p class="muted">Evolution item for certain Fire Pokémon.</p>
+      <span class="badge">🪙 100 coins</span>
+      <button class="green" onclick="buyItem(4)">Buy</button>
+    </div>
+    <div class="moncard">
+      <h3>Water Stone</h3>
+      <p class="muted">Evolution item for certain Water Pokémon.</p>
+      <span class="badge">🪙 100 coins</span>
+      <button class="green" onclick="buyItem(5)">Buy</button>
+    </div>
+    <div class="moncard">
+      <h3>Thunder Stone</h3>
+      <p class="muted">Evolution item for certain Electric Pokémon.</p>
+      <span class="badge">🪙 100 coins</span>
+      <button class="green" onclick="buyItem(6)">Buy</button>
+    </div>
+    <div class="moncard">
+      <h3>Leaf Stone</h3>
+      <p class="muted">Evolution item for certain Grass Pokémon.</p>
+      <span class="badge">🪙 100 coins</span>
+      <button class="green" onclick="buyItem(7)">Buy</button>
+    </div>
+    <div class="moncard">
+      <h3>Moon Stone</h3>
+      <p class="muted">Evolution item for certain Pokémon.</p>
+      <span class="badge">🪙 120 coins</span>
+      <button class="green" onclick="buyItem(8)">Buy</button>
+    </div></div>
+            </div>
+            <div class="panel">
+                <h2>🧬 Evolution</h2>
+                <p class="muted">Some Pokémon evolve by level. Others need evolution stones. Select a Pokémon and an
+                    item.</p>
+                <div class="actions">
+                    <select id="evolveMon"><option value="1">charmander Lv.6</option><option value="3">caterpie Lv.5</option><option value="11">pidgey Lv.6</option><option value="15">paras Lv.9</option></select>
+                    <select id="evolveItem">
+                        <option value="Fire Stone">Fire Stone</option>
+                        <option value="Water Stone">Water Stone</option>
+                        <option value="Thunder Stone">Thunder Stone</option>
+                        <option value="Leaf Stone">Leaf Stone</option>
+                        <option value="Moon Stone">Moon Stone</option>
+                    </select>
+                    <button class="purple" onclick="evolveWithStone()">Use Evolution Stone</button>
+                </div>
+                <div id="evolveMessage" class="log">Choose a Pokémon and an evolution stone.</div>
+            </div>
+        </section>
+
+        <section id="page-battle" class="page hidden">
+            <div class="panel">
+                <h2>⚔️ Battle Arena</h2>
+                <p class="muted">Manage HP and energy. Moves consume energy, and powerful moves take more. Dynamax lasts
+                    three turns.</p>
+                <div id="battleStatus" class="log">No active battle. Explore the world to encounter a Pokémon.</div>
+                <div id="battleField" class="battlefield hidden">
+                    <div class="fighter">
+                        <h3 id="enemyName">Pokémon #25</h3>
+                        <img id="enemySprite" alt="Opponent Pokémon" src="./Atharv&#39;s Pokémon World_files/25.png">
+                        <div id="enemyInfo">Level 3 • Normal</div>
+                        <div class="bar">
+                            <div id="enemyHP" class="fill" style="width: 100%;"></div>
+                        </div>
+                        <small id="enemyHPText">HP 45/45</small>
+                    </div>
+                    <div class="fighter">
+                        <h3 id="playerName">caterpie</h3>
+                        <img id="playerSprite" alt="Your Pokémon" src="./Atharv&#39;s Pokémon World_files/10(1).png">
+                        <div id="playerInfo">Level 4 • Bug</div>
+                        <div class="bar">
+                            <div id="playerHP" class="fill" style="width: 80.9524%;"></div>
+                        </div>
+                        <small id="playerHPText">HP 51/63</small>
+                        <div class="bar">
+                            <div id="playerEnergy" class="fill energy" style="width: 100%;"></div>
+                        </div>
+                        <small id="playerEnergyText">Energy 100/100</small>
+                    </div>
+                </div>
+                <div id="battleActions" class="actions hidden">
+                    <button onclick="playerMove(&#39;quick&#39;)">⚡ Quick Attack (10 energy)</button>
+                    <button onclick="playerMove(&#39;strong&#39;)">💥 Power Strike (25 energy)</button>
+                    <button onclick="playerMove(&#39;recover&#39;)">🔋 Rest (recover energy)</button>
+                    <button class="purple" onclick="dynamax()">🌋 Dynamax / G-Max</button>
+                    <button class="gold" onclick="throwBall()">🔴 Throw Poké Ball</button>
+                    <button class="dark" onclick="switchPokemon()">🔄 Switch Pokémon</button>
+                    <button class="red" onclick="runAway()">🏃 Run away</button>
+                </div>
+                <div id="battleLog" class="log">caterpie dealt 74 damage!
+Pokémon #25 fainted!
+caterpie reached level 5!</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>Made for Atharv • Save your progress regularly • Pokémon sprites load from PokéAPI's public sprite
+        repository.</footer>
+    <div id="toast" class="hidden">Victory! Earned 29 coins.</div>
+
+    <script>
+        "use strict";
+
+        const SPRITES = id =>
+            `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+
+        const REGIONS = [
+            { key: "meadow", name: "Starter Meadow", emoji: "🌱", levels: [2, 5], ids: [16, 19, 25, 10, 13, 43] },
+            { key: "forest", name: "Whispering Forest", emoji: "🌲", levels: [4, 10], ids: [1, 2, 3, 46, 48, 69, 152, 155] },
+            { key: "coast", name: "Crystal Coast", emoji: "🌊", levels: [7, 14], ids: [7, 8, 9, 54, 60, 72, 120, 129] },
+            { key: "volcano", name: "Blazing Volcano", emoji: "🌋", levels: [12, 22], ids: [4, 5, 6, 37, 58, 77, 126, 136] },
+            { key: "desert", name: "Golden Desert", emoji: "🏜️", levels: [16, 27], ids: [27, 28, 50, 51, 56, 95, 111, 127, 328, 551] },
+            { key: "mountain", name: "Thunder Mountains", emoji: "⛰️", levels: [20, 32], ids: [74, 75, 81, 82, 100, 125, 145, 304] },
+            { key: "ice", name: "Frozen Kingdom", emoji: "❄️", levels: [25, 38], ids: [27, 37, 86, 87, 131, 144, 215, 220] },
+            { key: "dragon", name: "Dragon's Realm", emoji: "🐉", levels: [32, 48], ids: [147, 148, 149, 246, 247, 248, 371, 372, 373] }
+        ];
+
+        const STARTERS = [
+            { id: 1, name: "Bulbasaur", type: "Grass", level: 5 },
+            { id: 4, name: "Charmander", type: "Fire", level: 5 },
+            { id: 7, name: "Squirtle", type: "Water", level: 5 },
+            { id: 25, name: "Pikachu", type: "Electric", level: 5 }
+        ];
+
+        const SHOP = [
+            { name: "Poké Ball", price: 30, kind: "balls", amount: 3, desc: "Three balls for catching Pokémon." },
+            { name: "Potion", price: 40, kind: "potions", amount: 2, desc: "Heals 30 HP." },
+            { name: "Super Potion", price: 75, kind: "superPotions", amount: 1, desc: "Heals 70 HP." },
+            { name: "Revive", price: 100, kind: "revives", amount: 1, desc: "Revives a fainted Pokémon." },
+            { name: "Fire Stone", price: 100, kind: "stones", amount: 1, desc: "Evolution item for certain Fire Pokémon." },
+            { name: "Water Stone", price: 100, kind: "stones", amount: 1, desc: "Evolution item for certain Water Pokémon." },
+            { name: "Thunder Stone", price: 100, kind: "stones", amount: 1, desc: "Evolution item for certain Electric Pokémon." },
+            { name: "Leaf Stone", price: 100, kind: "stones", amount: 1, desc: "Evolution item for certain Grass Pokémon." },
+            { name: "Moon Stone", price: 120, kind: "stones", amount: 1, desc: "Evolution item for certain Pokémon." }
+        ];
+
+        const STONE_EVOLUTIONS = {
+            "25": { item: "Thunder Stone", to: 26 },
+            "37": { item: "Fire Stone", to: 38 },
+            "58": { item: "Fire Stone", to: 59 },
+            "133": { item: "Water Stone", to: 134 },
+            "90": { item: "Water Stone", to: 91 },
+            "27": { item: "Moon Stone", to: 28 },
+            "43": { item: "Leaf Stone", to: 44 },
+            "44": { item: "Leaf Stone", to: 45 }
+        };
+
+        let game = freshGame();
+        let battle = null;
+        let currentPage = "world";
+        let soundOn = false;
+        let audioContext = null;
+        let toastTimer = null;
+        let busy = false;
+
+        function freshGame() {
+            return {
+                trainer: "Atharv", coins: 300, balls: 10, potions: 3, superPotions: 1, revives: 1,
+                stones: { "Fire Stone": 0, "Water Stone": 0, "Thunder Stone": 0, "Leaf Stone": 0, "Moon Stone": 0 },
+                team: [], pc: [], dex: [], badges: [], region: "meadow", nextId: 1
+            };
+        }
+
+        function makeMon(id, name, level, type) {
+            level = level || 5;
+            return {
+                uid: game.nextId++, id, name: name || `Pokémon #${id}`, type: type || "Normal",
+                level, maxHP: 30 + level * 5, hp: 30 + level * 5, attack: 5 + level * 2,
+                energy: 100, maxEnergy: 100, xp: 0, dynamaxTurns: 0, gmax: false
+            };
+        }
+
+        function esc(s) {
+            return String(s).replace(/[&<>"']/g, c => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            }[c]));
+        }
+
+        function sprite(id, back = false) {
+            if (back) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${id}.png`;
+            return SPRITES(id);
+        }
+
+        function monImage(id, back = false) {
+            return `<img src="${sprite(id, back)}" alt="Pokémon" onerror="this.onerror=null;this.src='${SPRITES(0)}';this.style.display='none'">`;
+        }
+
+        function currentRegion() {
+            return REGIONS.find(r => r.key === game.region) || REGIONS[0];
+        }
+
+        function activeMon() {
+            return game.team.find(m => m.hp > 0) || game.team[0] || null;
+        }
+
+        function showPage(page) {
+            currentPage = page;
+            document.querySelectorAll(".page").forEach(el => el.classList.add("hidden"));
+            const section = document.getElementById("page-" + page);
+            if (section) section.classList.remove("hidden");
+            renderAll();
+        }
+
+        function notify(message) {
+            const el = document.getElementById("toast");
+            el.textContent = message;
+            el.classList.remove("hidden");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.add("hidden"), 2600);
+        }
+
+        function logWorld(message) {
+            document.getElementById("worldMessage").textContent = message;
+        }
+
+        function logBattle(message) {
+            document.getElementById("battleLog").textContent = message;
+        }
+
+        function renderDashboard() {
+            document.getElementById("trainerName").textContent = game.trainer;
+            document.getElementById("coins").textContent = game.coins;
+            document.getElementById("shopCoins").textContent = game.coins;
+            document.getElementById("badges").textContent = game.badges.length + " / 8";
+            document.getElementById("balls").textContent = game.balls;
+            document.getElementById("teamCount").textContent = game.team.length + " / 6";
+            document.getElementById("locationName").textContent = currentRegion().name;
+        }
+
+        function renderWorld() {
+            document.getElementById("worldMap").innerHTML = REGIONS.map(r => `
+    <button class="region" onclick="travel('${r.key}')"
+      style="${game.region === r.key ? 'border-color:#ffd56a;box-shadow:0 0 12px #ffd56a55' : ''}">
+      <span class="emoji">${r.emoji}</span>
+      <strong>${r.name}</strong>
+      <small>Wild levels ${r.levels[0]}–${r.levels[1]}</small>
+      ${game.region === r.key ? '<span class="badge">Current location</span>' : ''}
+    </button>
+  `).join("");
+        }
+
+        function renderMonCard(m, where) {
+            return `<div class="moncard">
+    ${monImage(m.id)}
+    <h3>${esc(m.name)}</h3>
+    <span class="badge">Lv. ${m.level}</span>
+    <span class="badge">${esc(m.type)}</span>
+    <div class="bar"><div class="fill" style="width:${Math.max(0, m.hp / m.maxHP * 100)}%"></div></div>
+    <small>HP ${m.hp}/${m.maxHP} • Energy ${m.energy}/${m.maxEnergy}</small>
+    <div class="actions">
+      ${where === "team"
+                    ? `<button onclick="moveToPC(${m.uid})" ${game.team.length <= 1 ? 'disabled' : ''}>Move to PC</button>
+           <button class="green" onclick="healMon(${m.uid})">Rest</button>`
+                    : `<button onclick="moveToTeam(${m.uid})" ${game.team.length >= 6 ? 'disabled' : ''}>Add to Team</button>`}
+    </div>
+  </div>`;
+        }
+
+        function renderTeam() {
+            document.getElementById("teamCards").innerHTML = game.team.length
+                ? game.team.map(m => renderMonCard(m, "team")).join("")
+                : "<p>No Pokémon in your team.</p>";
+            document.getElementById("pcCards").innerHTML = game.pc.length
+                ? game.pc.map(m => renderMonCard(m, "pc")).join("")
+                : "<p>Your PC is empty.</p>";
+            document.getElementById("bagInfo").innerHTML = `
+    <p>🔴 Poké Balls: <strong>${game.balls}</strong></p>
+    <p>🧪 Potions: <strong>${game.potions}</strong></p>
+    <p>💖 Super Potions: <strong>${game.superPotions}</strong></p>
+    <p>✨ Revives: <strong>${game.revives}</strong></p>
+    <p>🪨 Evolution stones: <strong>${Object.entries(game.stones).map(([k, v]) => `${esc(k)}: ${v}`).join(" • ")}</strong></p>`;
+            document.getElementById("evolveMon").innerHTML = game.team.map(m =>
+                `<option value="${m.uid}">${esc(m.name)} Lv.${m.level}</option>`).join("");
+        }
+
+        function renderDex() {
+            const search = (document.getElementById("dexSearch").value || "").toLowerCase();
+            const ids = [...new Set(game.dex)].filter(id => {
+                const known = [...game.team, ...game.pc].find(m => m.id === id);
+                return !search || String(id).includes(search) || (known && known.name.toLowerCase().includes(search));
+            });
+            document.getElementById("dexCards").innerHTML = ids.length
+                ? ids.map(id => {
+                    const m = [...game.team, ...game.pc].find(p => p.id === id);
+                    return `<div class="moncard">${monImage(id)}<h3>${esc(m ? m.name : "Pokémon #" + id)}</h3><span class="badge">#${id}</span></div>`;
+                }).join("")
+                : "<p>No matching Pokémon discovered yet. Explore the world!</p>";
+        }
+
+        function renderShop() {
+            document.getElementById("shopCards").innerHTML = SHOP.map((item, i) => `
+    <div class="moncard">
+      <h3>${esc(item.name)}</h3>
+      <p class="muted">${esc(item.desc)}</p>
+      <span class="badge">🪙 ${item.price} coins</span>
+      <button class="green" onclick="buyItem(${i})">Buy</button>
+    </div>`).join("");
+        }
+
+        function renderBattle() {
+            const field = document.getElementById("battleField");
+            const actions = document.getElementById("battleActions");
+            if (!battle) {
+                field.classList.add("hidden");
+                actions.classList.add("hidden");
+                document.getElementById("battleStatus").textContent = "No active battle. Explore the world to encounter a Pokémon.";
+                return;
+            }
+            field.classList.remove("hidden");
+            actions.classList.remove("hidden");
+            const p = game.team.find(m => m.uid === battle.playerUid);
+            const e = battle.enemy;
+            if (!p) return;
+            document.getElementById("enemyName").textContent = e.name + (e.dynamaxTurns > 0 ? " 🌋 DYNAMAX" : "");
+            document.getElementById("playerName").textContent = p.name + (p.dynamaxTurns > 0 ? " 🌋 DYNAMAX" : "");
+            document.getElementById("enemySprite").src = sprite(e.id);
+            document.getElementById("playerSprite").src = sprite(p.id, true);
+            document.getElementById("enemyInfo").textContent = `Level ${e.level} • ${e.type}`;
+            document.getElementById("playerInfo").textContent = `Level ${p.level} • ${p.type}`;
+            document.getElementById("enemyHP").style.width = Math.max(0, e.hp / e.maxHP * 100) + "%";
+            document.getElementById("playerHP").style.width = Math.max(0, p.hp / p.maxHP * 100) + "%";
+            document.getElementById("enemyHPText").textContent = `HP ${e.hp}/${e.maxHP}`;
+            document.getElementById("playerHPText").textContent = `HP ${p.hp}/${p.maxHP}`;
+            document.getElementById("playerEnergy").style.width = Math.max(0, p.energy / p.maxEnergy * 100) + "%";
+            document.getElementById("playerEnergyText").textContent = `Energy ${p.energy}/${p.maxEnergy}`;
+            document.getElementById("battleStatus").textContent =
+                battle.gym ? `Gym battle • ${battle.gymName} • Win to earn a badge!` : "Wild Pokémon battle";
+            document.getElementById("battleActions").querySelectorAll("button").forEach(b => b.disabled = busy);
+        }
+
+        function renderAll() {
+            renderDashboard();
+            renderWorld();
+            renderTeam();
+            renderDex();
+            renderShop();
+            renderBattle();
+        }
+
+        function chooseStarter(id) {
+            if (game.team.length) return;
+            const s = STARTERS.find(x => x.id === id);
+            const m = makeMon(s.id, s.name, s.level, s.type);
+            game.team.push(m);
+            addDex(m.id);
+            document.getElementById("starter").classList.add("hidden");
+            logWorld(`Welcome, Atharv! ${m.name} joined your team. Head into the meadow to begin your adventure.`);
+            renderAll();
+            saveGame(true);
+            playTone(660, .15);
+        }
+
+        function addDex(id) {
+            if (!game.dex.includes(id)) game.dex.push(id);
+        }
+
+        function travel(key) {
+            if (battle) {
+                notify("Finish the current battle before travelling.");
+                return;
+            }
+            game.region = REGIONS.some(r => r.key === key) ? key : "meadow";
+            logWorld(`You travelled to ${currentRegion().name}. Explore to discover wild Pokémon.`);
+            renderAll();
+            saveGame(true);
+        }
+
+        function randomInt(a, b) {
+            return Math.floor(Math.random() * (b - a + 1)) + a;
+        }
+
+        function explore() {
+            if (!game.team.length) {
+                notify("Choose your starter first!");
+                return;
+            }
+            if (battle) {
+                notify("Finish your current battle first!");
+                showPage("battle");
+                return;
+            }
+            const r = currentRegion();
+            const id = r.ids[randomInt(0, r.ids.length - 1)];
+            const level = randomInt(r.levels[0], r.levels[1]);
+            const known = [...game.team, ...game.pc].find(m => m.id === id);
+            const name = known ? known.name : `Pokémon #${id}`;
+            const type = known ? known.type : "Normal";
+            const enemy = makeMon(id, name, level, type);
+            enemy.maxHP = Math.round(enemy.maxHP * (r.levels[1] >= 30 ? 1.2 : 1));
+            enemy.hp = enemy.maxHP;
+            enemy.attack += Math.floor(level / 2);
+            addDex(id);
+            startBattle(enemy, false, "");
+        }
+
+        function startBattle(enemy, isGym, gymName) {
+            if (battle) return;
+            const p = activeMon();
+            if (!p || p.hp <= 0) {
+                notify("All your Pokémon have fainted. Use a Revive or rest at the team screen.");
+                return;
+            }
+            battle = { enemy, playerUid: p.uid, gym: !!isGym, gymName: gymName || "", turn: 0 };
+            logBattle(`A wild ${enemy.name} appeared! Choose your move carefully.`);
+            showPage("battle");
+            playTone(440, .12);
+        }
+
+        function playerMove(move) {
+            if (!battle || busy) return;
+            const p = game.team.find(m => m.uid === battle.playerUid);
+            if (!p || p.hp <= 0) return;
+            if (move === "recover") {
+                p.energy = Math.min(p.maxEnergy, p.energy + 35);
+                logBattle(`${p.name} rests and recovers energy. The opponent gets a turn!`);
+                renderAll();
+                enemyTurn();
+                return;
+            }
+            const cost = move === "quick" ? 10 : 25;
+            if (p.energy < cost) {
+                notify("Not enough energy! Use Rest to recover energy.");
+                return;
+            }
+            p.energy -= cost;
+            let damage = Math.max(1, Math.floor(p.attack * (move === "quick" ? 1.1 : 2.0) + randomInt(0, 5)));
+            if (p.dynamaxTurns > 0) damage = Math.floor(damage * 1.5);
+            battle.enemy.hp = Math.max(0, battle.enemy.hp - damage);
+            playTone(move === "quick" ? 600 : 250, .1);
+            if (battle.enemy.hp <= 0) {
+                logBattle(`${p.name} dealt ${damage} damage!\n${battle.enemy.name} fainted!`);
+                winBattle();
+                return;
+            }
+            battle.turn++;
+            logBattle(`${p.name} dealt ${damage} damage to ${battle.enemy.name}!`);
+            renderAll();
+            enemyTurn();
+        }
+
+        function enemyTurn() {
+            if (!battle || busy) return;
+            const p = game.team.find(m => m.uid === battle.playerUid);
+            if (!p) return;
+            if (battle.enemy.dynamaxTurns > 0) battle.enemy.dynamaxTurns--;
+            if (p.dynamaxTurns > 0) p.dynamaxTurns--;
+            const damage = Math.max(1, Math.floor(battle.enemy.attack * randomInt(5, 10) / 10));
+            p.hp = Math.max(0, p.hp - damage);
+            p.energy = Math.min(p.maxEnergy, p.energy + 5);
+            logBattle(document.getElementById("battleLog").textContent +
+                `\n${battle.enemy.name} counterattacked for ${damage} damage!`);
+            if (p.hp <= 0) {
+                logBattle(document.getElementById("battleLog").textContent + `\n${p.name} fainted!`);
+                const next = game.team.find(m => m.hp > 0);
+                if (next) {
+                    battle.playerUid = next.uid;
+                    logBattle(document.getElementById("battleLog").textContent + `\nGo, ${next.name}!`);
+                } else {
+                    logBattle(document.getElementById("battleLog").textContent + "\nYour whole team has fainted. You retreat to the Pokémon Center.");
+                    battle = null;
+                    setTimeout(() => restTeam(true), 350);
+                }
+            }
+            renderAll();
+            saveGame(true);
+        }
+
+        function winBattle() {
+            if (!battle) return;
+            const old = battle.enemy;
+            const wasGym = battle.gym;
+            const gymName = battle.gymName;
+            const p = game.team.find(m => m.uid === battle.playerUid);
+            if (p) {
+                p.xp += 30 + old.level * 3;
+                p.energy = Math.min(p.maxEnergy, p.energy + 15);
+                while (p.xp >= p.level * 25) {
+                    p.xp -= p.level * 25;
+                    p.level++;
+                    p.maxHP += 5;
+                    p.attack += 2;
+                    p.hp = Math.min(p.maxHP, p.hp + 10);
+                    logBattle(document.getElementById("battleLog").textContent +
+                        `\n${p.name} reached level ${p.level}!`);
+                    const evolution = levelEvolution(p.id);
+                    if (evolution) {
+                        p.id = evolution.id;
+                        p.name = evolution.name;
+                        p.type = evolution.type;
+                        p.maxHP += 10;
+                        p.hp = Math.min(p.maxHP, p.hp + 10);
+                        addDex(p.id);
+                        logBattle(document.getElementById("battleLog").textContent +
+                            `\n✨ Your Pokémon evolved into ${p.name}!`);
+                    }
+                }
+            }
+            game.coins += wasGym ? 150 : 20 + old.level * 3;
+            if (wasGym && !game.badges.includes(gymName)) game.badges.push(gymName);
+            battle = null;
+            restTeam(false);
+            renderAll();
+            saveGame(true);
+            playTone(800, .2);
+            if (wasGym) notify(`Gym victory! You earned the ${gymName} badge and coins!`);
+            else notify(`Victory! Earned ${20 + old.level * 3} coins.`);
+        }
+
+        function levelEvolution(id) {
+            const evo = {
+                1: { id: 2, name: "Ivysaur", type: "Grass" },
+                2: { id: 3, name: "Venusaur", type: "Grass" },
+                4: { id: 5, name: "Charmeleon", type: "Fire" },
+                5: { id: 6, name: "Charizard", type: "Fire" },
+                7: { id: 8, name: "Wartortle", type: "Water" },
+                8: { id: 9, name: "Blastoise", type: "Water" },
+                10: { id: 11, name: "Metapod", type: "Bug" },
+                11: { id: 12, name: "Butterfree", type: "Bug" },
+                16: { id: 17, name: "Pidgeotto", type: "Normal" },
+                17: { id: 18, name: "Pidgeot", type: "Normal" },
+                19: { id: 20, name: "Raticate", type: "Normal" },
+                25: { id: 26, name: "Raichu", type: "Electric" },
+                152: { id: 153, name: "Bayleef", type: "Grass" },
+                155: { id: 156, name: "Quilava", type: "Fire" }
+            };
+            const levels = { 1: 16, 2: 32, 4: 16, 5: 36, 7: 16, 8: 36, 10: 7, 11: 10, 16: 18, 17: 36, 19: 20, 25: 100, 152: 16, 155: 14 };
+            if (evo[id] && (levels[id] || 100) <= game.team.find(m => m.id === id)?.level) return evo[id];
+            return null;
+        }
+
+        function dynamax() {
+            if (!battle || busy) return;
+            const p = game.team.find(m => m.uid === battle.playerUid);
+            if (!p) return;
+            if (p.dynamaxTurns > 0) {
+                notify("Your Pokémon is already Dynamaxed!");
+                return;
+            }
+            if (battle.turn > 0) {
+                notify("Dynamax can only be activated at the start of your battle.");
+                return;
+            }
+            if (p.energy < 30) {
+                notify("You need at least 30 energy to Dynamax.");
+                return;
+            }
+            p.energy -= 30;
+            p.dynamaxTurns = 3;
+            p.maxHP = Math.floor(p.maxHP * 1.5);
+            p.hp = Math.min(p.maxHP, p.hp + Math.floor(p.maxHP * .25));
+            p.attack = Math.floor(p.attack * 1.4);
+            p.gmax = [6, 25, 52, 68, 94, 133, 143, 569, 809, 812, 815, 818].includes(p.id);
+            logBattle(`${p.name} Dynamaxed${p.gmax ? " into Gigantamax form" : ""}! Its power surged!`);
+            renderAll();
+            playTone(180, .3);
+        }
+
+        function throwBall() {
+            if (!battle || busy) return;
+            if (battle.gym) {
+                notify("You cannot catch a trainer's Pokémon!");
+                return;
+            }
+            if (game.balls <= 0) {
+                notify("You're out of Poké Balls! Visit the shop.");
+                return;
+            }
+            game.balls--;
+            const e = battle.enemy;
+            const chance = Math.min(.9, Math.max(.15, .25 + (1 - e.hp / e.maxHP) * .65));
+            logBattle(`You threw a Poké Ball at ${e.name}...`);
+            renderAll();
+            busy = true;
+            renderBattle();
+            setTimeout(() => {
+                busy = false;
+                if (Math.random() < chance) {
+                    e.hp = Math.max(1, e.hp);
+                    if (game.team.length < 6) game.team.push(e);
+                    else game.pc.push(e);
+                    addDex(e.id);
+                    battle = null;
+                    restTeam(false);
+                    renderAll();
+                    saveGame(true);
+                    logWorld(`${e.name} was caught! ${game.team.length <= 6 ? "Added to your team." : "Sent to your PC."}`);
+                    notify(`Gotcha! ${e.name} was caught!`);
+                    playTone(880, .15);
+                } else {
+                    logBattle(`${e.name} broke free! It attacks!`);
+                    renderAll();
+                    enemyTurn();
+                }
+                saveGame(true);
+            }, 1000);
+        }
+
+        function runAway() {
+            if (!battle || busy) return;
+            if (battle.gym) {
+                notify("You cannot run from a gym battle!");
+                return;
+            }
+            battle = null;
+            logBattle("You escaped safely.");
+            renderAll();
+            restTeam(false);
+            notify("Escaped from battle.");
+        }
+
+        function switchPokemon() {
+            if (!battle || busy) return;
+            const choices = game.team.filter(m => m.hp > 0 && m.uid !== battle.playerUid);
+            if (!choices.length) {
+                notify("No other healthy Pokémon to switch to.");
+                return;
+            }
+            const list = choices.map((m, i) => `${i + 1}. ${m.name} (Lv.${m.level})`).join("\n");
+            const answer = prompt("Switch to which Pokémon?\n" + list);
+            const choice = choices[Number(answer) - 1];
+            if (!choice) return;
+            battle.playerUid = choice.uid;
+            logBattle(`Go, ${choice.name}!`);
+            renderAll();
+            enemyTurn();
+        }
+
+        function challengeGym() {
+            if (battle) {
+                notify("Finish your current battle first.");
+                return;
+            }
+            const index = game.badges.length;
+            if (index >= REGIONS.length) {
+                notify("You have conquered every gym! Champion Atharv!");
+                return;
+            }
+            const r = REGIONS[index];
+            const level = Math.max(r.levels[1], 8 + index * 5);
+            const id = r.ids[randomInt(0, r.ids.length - 1)];
+            const known = [...game.team, ...game.pc].find(m => m.id === id);
+            const enemy = makeMon(id, known ? known.name : `Gym Pokémon #${id}`, level, known ? known.type : "Normal");
+            enemy.maxHP = Math.floor(enemy.maxHP * 1.5);
+            enemy.hp = enemy.maxHP;
+            enemy.attack += index * 3;
+            startBattle(enemy, true, r.name + " Badge");
+        }
+
+        function moveToPC(uid) {
+            if (game.team.length <= 1) return notify("Keep at least one Pokémon in your team.");
+            const i = game.team.findIndex(m => m.uid === uid);
+            if (i < 0) return;
+            game.pc.push(game.team.splice(i, 1)[0]);
+            renderAll(); saveGame(true);
+        }
+
+        function moveToTeam(uid) {
+            if (game.team.length >= 6) return notify("Your team is full!");
+            const i = game.pc.findIndex(m => m.uid === uid);
+            if (i < 0) return;
+            game.team.push(game.pc.splice(i, 1)[0]);
+            renderAll(); saveGame(true);
+        }
+
+        function healMon(uid) {
+            const m = game.team.find(p => p.uid === uid);
+            if (!m) return;
+            m.hp = m.maxHP;
+            m.energy = m.maxEnergy;
+            renderAll(); saveGame(true);
+            notify(`${m.name} rested and recovered!`);
+        }
+
+        function restTeam(showMessage) {
+            game.team.forEach(m => {
+                if (m.hp > 0) {
+                    m.hp = Math.min(m.maxHP, m.hp + Math.ceil(m.maxHP * .25));
+                    m.energy = Math.min(m.maxEnergy, m.energy + 35);
+                }
+            });
+            if (showMessage) notify("Your Pokémon were taken to the Pokémon Center and revived.");
+            renderAll(); saveGame(true);
+        }
+
+        function usePotion() {
+            if (game.potions <= 0) return notify("No Potions left!");
+            const m = chooseTeamMon();
+            if (!m) return;
+            if (m.hp <= 0) return notify("Use a Revive on a fainted Pokémon.");
+            game.potions--;
+            m.hp = Math.min(m.maxHP, m.hp + 30);
+            renderAll(); saveGame(true);
+        }
+
+        function useSuperPotion() {
+            if (game.superPotions <= 0) return notify("No Super Potions left!");
+            const m = chooseTeamMon();
+            if (!m) return;
+            if (m.hp <= 0) return notify("Use a Revive on a fainted Pokémon.");
+            game.superPotions--;
+            m.hp = Math.min(m.maxHP, m.hp + 70);
+            renderAll(); saveGame(true);
+        }
+
+        function useRevive() {
+            if (game.revives <= 0) return notify("No Revives left!");
+            const fainted = game.team.filter(m => m.hp <= 0);
+            if (!fainted.length) return notify("None of your team Pokémon have fainted.");
+            const m = fainted[0];
+            game.revives--;
+            m.hp = Math.ceil(m.maxHP * .5);
+            m.energy = Math.ceil(m.maxEnergy * .5);
+            renderAll(); saveGame(true);
+            notify(`${m.name} was revived!`);
+        }
+
+        function chooseTeamMon() {
+            if (!game.team.length) return null;
+            if (game.team.length === 1) return game.team[0];
+            const list = game.team.map((m, i) => `${i + 1}. ${m.name} (HP ${m.hp}/${m.maxHP})`).join("\n");
+            const n = Number(prompt("Choose a Pokémon:\n" + list));
+            return game.team[n - 1] || null;
+        }
+
+        function buyItem(index) {
+            const item = SHOP[index];
+            if (!item) return;
+            if (game.coins < item.price) return notify("Not enough coins!");
+            game.coins -= item.price;
+            if (item.kind === "stones") game.stones[item.name] = (game.stones[item.name] || 0) + item.amount;
+            else game[item.kind] += item.amount;
+            renderAll(); saveGame(true);
+            notify(`Purchased ${item.name}!`);
+        }
+
+        function evolveWithStone() {
+            const uid = Number(document.getElementById("evolveMon").value);
+            const m = game.team.find(p => p.uid === uid);
+            const stone = document.getElementById("evolveItem").value;
+            if (!m) return notify("Choose a Pokémon first.");
+            if ((game.stones[stone] || 0) <= 0) return notify("You don't have that evolution stone.");
+            const evo = STONE_EVOLUTIONS[m.id];
+            if (!evo || evo.item !== stone) {
+                document.getElementById("evolveMessage").textContent = `${m.name} cannot evolve with a ${stone}.`;
+                return;
+            }
+            game.stones[stone]--;
+            const names = {
+                26: ["Raichu", "Electric"], 38: ["Ninetales", "Fire"], 59: ["Arcanine", "Fire"],
+                134: ["Vaporeon", "Water"], 91: ["Cloyster", "Water"], 28: ["Sandslash", "Ground"],
+                44: ["Gloom", "Grass"], 45: ["Vileplume", "Grass"]
+            };
+            m.id = evo.to;
+            m.name = names[evo.to]?.[0] || `Pokémon #${evo.to}`;
+            m.type = names[evo.to]?.[1] || m.type;
+            m.maxHP += 15;
+            m.hp = Math.min(m.maxHP, m.hp + 15);
+            m.attack += 4;
+            addDex(m.id);
+            document.getElementById("evolveMessage").textContent = `✨ Congratulations! Your Pokémon evolved into ${m.name}!`;
+            renderAll(); saveGame(true);
+            playTone(750, .25);
+        }
+
+        function saveGame(silent) {
+            try {
+                localStorage.setItem("atharvPokemonWorldSave", JSON.stringify(game));
+                if (!silent) notify("Game saved!");
+            } catch (e) {
+                if (!silent) notify("Could not save. Your browser may block local storage.");
+            }
+        }
+
+        function loadGame() {
+            try {
+                const raw = localStorage.getItem("atharvPokemonWorldSave");
+                if (!raw) return notify("No saved game found yet.");
+                const data = JSON.parse(raw);
+                if (!data || !Array.isArray(data.team) || !Array.isArray(data.pc)) throw new Error("Invalid save");
+                game = Object.assign(freshGame(), data);
+                if (!game.stones) game.stones = {};
+                if (!game.dex) game.dex = [];
+                if (!game.badges) game.badges = [];
+                battle = null;
+                document.getElementById("starter").classList.toggle("hidden", game.team.length > 0);
+                showPage("world");
+                notify("Game loaded successfully!");
+            } catch (e) {
+                notify("Save file could not be loaded.");
+            }
+        }
+
+        function toggleSound() {
+            soundOn = !soundOn;
+            notify(soundOn ? "Sound effects enabled." : "Sound effects muted.");
+            if (soundOn) playTone(550, .12);
+        }
+
+        function playTone(frequency, duration) {
+            if (!soundOn) return;
+            try {
+                audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                oscillator.frequency.value = frequency;
+                oscillator.type = "sine";
+                gain.gain.value = .06;
+                oscillator.connect(gain);
+                gain.connect(audioContext.destination);
+                oscillator.start();
+                gain.gain.exponentialRampToValueAtTime(.001, audioContext.currentTime + duration);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) { }
+        }
+
+        function init() {
+            document.getElementById("starterCards").innerHTML = STARTERS.map(s => `
+    <div class="moncard">
+      ${monImage(s.id)}
+      <h3>${s.name}</h3><span class="badge">${s.type}</span>
+      <button class="green" onclick="chooseStarter(${s.id})">Choose ${s.name}</button>
+    </div>`).join("");
+            const saved = localStorage.getItem("atharvPokemonWorldSave");
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data && Array.isArray(data.team) && data.team.length) {
+                        game = Object.assign(freshGame(), data);
+                        if (!game.stones) game.stones = {};
+                        if (!game.dex) game.dex = [];
+                        if (!game.badges) game.badges = [];
+                        document.getElementById("starter").classList.add("hidden");
+                    }
+                } catch (e) { }
+            }
+            renderAll();
+        }
+
+        init();
+    </script>
+
+
+</body></html>
